@@ -1,0 +1,31 @@
+services:
+  app:
+    platform: linux/x86_64
+    build:
+      context: .
+      dockerfile: containers/Dockerfile
+    command: sleep infinity
+    env_file: containers/.env
+    volumes:
+      - .:/app
+      - bundle_data:/usr/local/bundle:cached
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+
+  db:
+    image: postgres:16.1
+    env_file: containers/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+    driver: local
+  bundle_data:
+    driver: local
