@@ -38,11 +38,11 @@ $ docker-compose exec app bash
 $ bundle exec rspec
 ```
 
-Annotate ※Run modified `config/routes.rb`
+AnnotateRb ※Run modified `config/routes.rb`
 
 ```bash
 $ docker-compose exec app bash
-$ bundle exec rake annotate_routes
+$ bundle exec annotaterb routes
 ```
 
 ### API

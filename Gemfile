@@ -47,7 +47,7 @@ end
 group :development do
   gem "web-console"
   gem "bullet"
-  gem "annotate"
+  gem "annotaterb"
 end
 
 group :test do
