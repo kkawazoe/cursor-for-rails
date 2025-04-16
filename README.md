@@ -1,24 +1,50 @@
-# README
+# Getting Started with Docker
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Prerequisites
 
-Things you may want to cover:
+* Docker
+* docker-compose
 
-* Ruby version
+### Run on docker
 
-* System dependencies
+First time run build project
 
-* Configuration
+```bash
+$ docker-compose up -d --build
+```
 
-* Database creation
+app
 
-* Database initialization
+```bash
+$ docker-compose exec app bash
+$ bundle install
+$ bundle exec rails db:create
+$ bundle exec rails db:migrate
+$ bundle exec rails db:migrate RAILS_ENV=test
+$ bundle exec rails db:seed_fu
+```
 
-* How to run the test suite
+Start development server
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+$ docker-compose exec app bash
+$ bundle exec rails s -b 0.0.0.0
+```
 
-* Deployment instructions
+Rspec
 
-* ...
+```bash
+$ docker-compose exec app bash
+$ bundle exec rspec
+```
+
+Annotate ※Run modified `config/routes.rb`
+
+```bash
+$ docker-compose exec app bash
+$ bundle exec rake annotate_routes
+```
+
+### API
+
+* docs/openapi.yaml

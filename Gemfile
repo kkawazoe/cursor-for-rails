@@ -27,7 +27,11 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
-# gem "rack-cors"
+gem "rack-cors"
+gem "seed-fu"
+gem "counter_culture"
+gem "panko_serializer"
+gem "kaminari"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -42,4 +46,13 @@ end
 
 group :development do
   gem "web-console"
+  gem "bullet"
+  gem "annotate"
+end
+
+group :test do
+  gem "rspec-rails", "~> 7.0.0"
+  gem "simplecov"
+  gem "shoulda-matchers"
+  gem "factory_bot_rails"
 end
