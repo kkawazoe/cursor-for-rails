@@ -42,11 +42,12 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "bullet"
 end
 
 group :development do
   gem "web-console"
-  gem "bullet"
   gem "annotaterb"
 end
 
