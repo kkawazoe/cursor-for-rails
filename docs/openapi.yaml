@@ -1,0 +1,339 @@
+openapi: 3.0.3
+info:
+  title: Cursor For Rails API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: user
+    description: ユーザに関するエンドポイント
+  - name: movie
+    description: 映画に関するエンドポイント
+  - name: favorite
+    description: お気に入りに関するエンドポイント
+paths:
+  /auth:
+    post:
+      summary:
+        ユーザの登録
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                email:
+                  type: "string"
+                  example: "test_user@sample.com"
+                password:
+                  type: "string"
+                  example: "abcd1234"
+                password_confirmation:
+                  type: "string"
+                  example: "abcd1234"
+              required:
+                - email
+                - password
+                - password_confirmation
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+                
+  /auth/sign_in:
+    post:
+      summary:
+        サインイン
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                email:
+                  type: "string"
+                  example: "test_user@sample.com"
+                password:
+                  type: "string"
+                  example: "abcd1234"
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  token:
+                    type: "string"
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+  /movies:
+    get:
+      summary:
+        映画一覧を取得
+      tags:
+        - movie
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: "object"
+            properties:
+              search:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  summary:
+                    type: string
+                  restrict:
+                    type: integer
+                    format: int64
+                  rating:
+                    type: number
+                    format: Float
+                  to_favorite_registered_count:
+                    type: integer
+                    format: int64
+            example:
+              {
+                search: {
+                  "title": "ハリー・ポッターと賢者の石",
+                  "summary": "10年前に両親が亡くなったあと",
+                  "restrict": 0,
+                  "rating": 4.5,
+                  "to_favorite_registered_count": 3,
+                }
+              }
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieList'
+  /movies/{id}:
+    get:
+      summary:
+        指定した映画の詳細を取得
+      tags:
+        - movie
+      parameters:
+        - name: id
+          in: path
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Movie"
+        '404':
+          description: 該当の映画IDが存在しなかった場合のレスポンス
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFound"
+  /favorites/{id}:
+    post:
+      summary:
+        指定した映画をお気に入りに追加
+      tags:
+        - favorite
+      parameters:
+        - name: uid
+          in: header
+          schema:
+            type: string
+        - name: access-token
+          in: header
+          schema:
+            type: string
+        - name: client
+          in: header
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: 登録完了時のレスポンス
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Favorite"
+        '401':
+          description: 認証失敗時のレスポンス
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unauthorized"
+        '422':
+          description: 既にお気に入り登録済の映画IDを指定した場合のレスポンス
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  errors:
+                    type: "array"
+                    items:
+                      type: "string"
+                      example: "バリデーションに失敗しましたお気に入り映画はすでに存在します"
+  /favorites:
+    get:
+      summary:
+        お気に入りに登録した映画一覧を取得する
+      tags:
+        - favorite
+      parameters:
+        - name: uid
+          in: header
+          schema:
+            type: string
+        - name: access-token
+          in: header
+          schema:
+            type: string
+        - name: client
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MovieList"
+        '401':
+          description: 認証失敗時のレスポンス
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unauthorized"
+components:
+  schemas:
+    User:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          example: 7
+        email:
+          type: "string"
+          example: "test_user1@sample.com"
+    Movie:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          example: 1
+        title:
+          type: "string"
+          example: "ハリー・ポッターと賢者の石"
+        summary:
+          type: "string"
+          example: "10年前に両親が亡くなったあと、ロンドン近郊のサレーに住むダーズリー家に引き取られていたハリー・ポッターは..."
+        restrict:
+          type: "integer"
+          format: "int64"
+          description: "年齢制限(映倫準拠) ※0: G(制限なし), 1: PG12, 2: R15+, 3: R18+"
+          example: 0
+        rating:
+          type: "number"
+          format: "float"
+          example: 4.5
+        published_year:
+          type: "integer"
+          format: "int64"
+          example: 2001
+        director_name:
+          type: "string"
+          example: "クリス・コロンバス"
+        to_favorite_registered_count:
+          type: "integer"
+          format: "int64"
+          example: 3
+    MovieList:
+      type: "array"
+      items:
+        type: "object"
+        properties:
+          id:
+            type: "integer"
+            format: "int64"
+            example: 1
+          title:
+            type: "string"
+            example: "ハリー・ポッターと賢者の石"
+          summary:
+            type: "string"
+            example: "10年前に両親が亡くなったあと、ロンドン近郊のサレーに住むダーズリー家に引き取られていたハリー・ポッターは..."
+          restrict:
+            type: "integer"
+            format: "int64"
+            description: "年齢制限(映倫準拠) ※0: G(制限なし), 1: PG12, 2: R15+, 3: R18+"
+            example: 0
+          rating:
+            type: "number"
+            format: "float"
+            example: 4.5
+          to_favorite_registered_count:
+            type: "integer"
+            format: "int64"
+            example: 3
+    Favorite:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          example: 1
+        movie_id:
+          type: "integer"
+          format: "int64"
+          example: 1
+        user_id:
+          type: "integer"
+          format: "int64"
+          example: 1
+    Unauthorized:
+      type: "object"
+      properties:
+        errors:
+          type: "array"
+          items:
+            type: "string"
+            example: "ログインもしくはアカウント登録してください。"
+    NotFound:
+      type: "object"
+      properties:
+        errors:
+          type: "array"
+          items:
+            type: "string"
+            example: "該当のレコードは存在しません"
