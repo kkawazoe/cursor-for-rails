@@ -10,7 +10,7 @@ class AuthController < ApplicationController
 
   def sign_in
     if params[:email].blank? || params[:password].blank?
-      return render json: { errors: [ I18n.t("api.auth.sign_in.missing_credentials") ] }, status: :bad_request
+      return render json: { errors: [ I18n.t("controllers.auth.sign_in.missing_credentials") ] }, status: :bad_request
     end
 
     user = User.find_by(email: params[:email])
@@ -18,7 +18,7 @@ class AuthController < ApplicationController
       token = generate_token(user)
       render json: AuthSerializer.new.serialize({ user: user, token: token }), status: :ok
     else
-      render json: { errors: [ I18n.t("api.auth.sign_in.invalid_credentials") ] }, status: :unauthorized
+      render json: { errors: [ I18n.t("controllers.auth.sign_in.invalid_credentials") ] }, status: :unauthorized
     end
   end
 

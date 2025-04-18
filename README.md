@@ -18,17 +18,17 @@ app
 ```bash
 $ docker-compose exec app bash
 $ bundle install
-$ bundle exec rails db:create
-$ bundle exec rails db:migrate
-$ bundle exec rails db:migrate RAILS_ENV=test
-$ bundle exec rails db:seed_fu
+$ bin/rails db:create
+$ bin/rails db:migrate
+$ bin/rails db:migrate RAILS_ENV=test
+$ bin/rails db:seed_fu
 ```
 
 Start development server
 
 ```bash
 $ docker-compose exec app bash
-$ bundle exec rails s -b 0.0.0.0
+$ bin/rails s -b 0.0.0.0
 ```
 
 Rspec

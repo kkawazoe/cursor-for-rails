@@ -1,0 +1,8 @@
+ja:
+  controllers:
+    auth:
+      sign_in:
+        invalid_credentials: "メールアドレスまたはパスワードが正しくありません"
+        missing_credentials: "メールアドレスとパスワードを入力してください"
+        email_blank: "メールアドレスを入力してください"
+        password_blank: "パスワードを入力してください" 
