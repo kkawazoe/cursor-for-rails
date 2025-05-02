@@ -18,6 +18,9 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV["DATABASE_HOST"] %>
+  username: <%= ENV["DATABASE_USERNAME"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
 
 
 development:
@@ -79,20 +82,16 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary: &primary_production
-    <<: *default
-    database: cursor_for_rails
-    username: cursor_for_rails
-    password: <%= ENV["CURSOR_FOR_RAILS_DATABASE_PASSWORD"] %>
+  <<: *default
+  database: cursor_for_rails_production
+  username: cursor_for_rails
+  password: <%= ENV["CURSOR_FOR_RAILS_DATABASE_PASSWORD"] %>
   cache:
-    <<: *primary_production
     database: cursor_for_rails_cache
     migrations_paths: db/cache_migrate
   queue:
-    <<: *primary_production
     database: cursor_for_rails_queue
     migrations_paths: db/queue_migrate
   cable:
-    <<: *primary_production
     database: cursor_for_rails_cable
     migrations_paths: db/cable_migrate
