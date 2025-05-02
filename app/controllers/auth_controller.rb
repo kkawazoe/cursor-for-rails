@@ -16,6 +16,7 @@ class AuthController < ApplicationController
     user = User.find_by(email: params[:email])
     if user&.authenticate(params[:password])
       token = generate_token(user)
+
       render json: AuthSerializer.new.serialize({ user: user, token: token }), status: :ok
     else
       render json: { errors: [ I18n.t("controllers.auth.sign_in.invalid_credentials") ] }, status: :unauthorized
