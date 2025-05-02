@@ -19,6 +19,7 @@ app
 $ docker-compose exec app bash
 $ bundle install
 $ bin/rails db:create
+$ bin/rails db:create RAILS_ENV=test
 $ bin/rails db:migrate
 $ bin/rails db:migrate RAILS_ENV=test
 $ bin/rails db:seed_fu
