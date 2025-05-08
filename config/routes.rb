@@ -38,4 +38,6 @@ Rails.application.routes.draw do
 
   post 'auth', to: 'auth#create'
   post 'auth/sign_in', to: 'auth#sign_in'
+
+  resources :movies, only: [:index]
 end
