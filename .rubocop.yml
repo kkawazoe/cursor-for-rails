@@ -27,3 +27,6 @@ Layout/LineLength:
 
 Layout/DotPosition:
   EnforcedStyle: leading
+
+Rails/WhereRange:
+  Enabled: false
