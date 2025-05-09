@@ -35,3 +35,4 @@
 /coverage
 
 .cursor
+.DS_Store
