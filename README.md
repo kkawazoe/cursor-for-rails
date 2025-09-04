@@ -1,11 +1,11 @@
 # Getting Started with Docker
 
-### Prerequisites
+## Prerequisites
 
 * Docker
 * docker-compose
 
-### Run on docker
+## Run on docker
 
 First time run build project
 
@@ -46,6 +46,6 @@ $ docker-compose exec app bash
 $ bundle exec annotaterb routes
 ```
 
-### API
+## API
 
 * docs/openapi.yaml

@@ -14,10 +14,11 @@ tags:
 paths:
   /auth:
     post:
-      summary:
-        ユーザの登録
+      summary: ユーザの登録
       tags:
         - user
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -48,10 +49,10 @@ paths:
                 
   /auth/sign_in:
     post:
-      summary:
-        サインイン
+      summary: サインイン
       tags:
         - user
+      security: []
       requestBody:
         required: true
         content:
@@ -83,10 +84,10 @@ paths:
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
   /movies:
     get:
-      summary:
-        映画一覧を取得
+      summary: 映画一覧を取得
       tags:
         - movie
+      security: []
       parameters:
         - name: search
           in: query
@@ -112,8 +113,8 @@ paths:
             example:
               {
                 search: {
-                  "title": "ハリー・ポッターと賢者の石",
-                  "summary": "10年前に両親が亡くなったあと",
+                  "title": "大冒険",
+                  "summary": "若い探検家が忘れられた街の秘密を解き明かす旅に出る物語",
                   "restrict": 0,
                   "rating": 4.5,
                   "to_favorite_registered_count": 3,
@@ -128,15 +129,14 @@ paths:
                 $ref: '#/components/schemas/MovieList'
   /movies/{id}:
     get:
-      summary:
-        指定した映画の詳細を取得
+      summary: 指定した映画の詳細を取得
       tags:
         - movie
+      security: []
       parameters:
         - name: id
           in: path
           required: true
-          explode: true
           schema:
             type: string
       responses:
@@ -154,10 +154,11 @@ paths:
                 $ref: "#/components/schemas/NotFound"
   /favorites/{id}:
     post:
-      summary:
-        指定した映画をお気に入りに追加
+      summary: 指定した映画をお気に入りに追加
       tags:
         - favorite
+      security:
+        - BearerAuth: []
       parameters:
         - name: uid
           in: header
@@ -203,10 +204,11 @@ paths:
                       example: "バリデーションに失敗しましたお気に入り映画はすでに存在します"
   /favorites:
     get:
-      summary:
-        お気に入りに登録した映画一覧を取得する
+      summary: お気に入りに登録した映画一覧を取得する
       tags:
         - favorite
+      security:
+        - BearerAuth: []
       parameters:
         - name: uid
           in: header
@@ -234,6 +236,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Unauthorized"
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     User:
       type: "object"
@@ -254,14 +261,14 @@ components:
           example: 1
         title:
           type: "string"
-          example: "ハリー・ポッターと賢者の石"
+          example: "大冒険"
         summary:
           type: "string"
-          example: "10年前に両親が亡くなったあと、ロンドン近郊のサレーに住むダーズリー家に引き取られていたハリー・ポッターは..."
+          example: "若い探検家が忘れられた街の秘密を解き明かす旅に出る物語"
         restrict:
           type: "integer"
           format: "int64"
-          description: "年齢制限(映倫準拠) ※0: G(制限なし), 1: PG12, 2: R15+, 3: R18+"
+          description: "年齢制限(0: G, 1: PG12, 2: R15+, 3: R18+)"
           example: 0
         rating:
           type: "number"
@@ -273,7 +280,7 @@ components:
           example: 2001
         director_name:
           type: "string"
-          example: "クリス・コロンバス"
+          example: "田中太郎"
         to_favorite_registered_count:
           type: "integer"
           format: "int64"
@@ -289,14 +296,14 @@ components:
             example: 1
           title:
             type: "string"
-            example: "ハリー・ポッターと賢者の石"
+            example: "大冒険"
           summary:
             type: "string"
-            example: "10年前に両親が亡くなったあと、ロンドン近郊のサレーに住むダーズリー家に引き取られていたハリー・ポッターは..."
+            example: "若い探検家が忘れられた街の秘密を解き明かす旅に出る物語"
           restrict:
             type: "integer"
             format: "int64"
-            description: "年齢制限(映倫準拠) ※0: G(制限なし), 1: PG12, 2: R15+, 3: R18+"
+            description: "年齢制限(0: G, 1: PG12, 2: R15+, 3: R18+)"
             example: 0
           rating:
             type: "number"
