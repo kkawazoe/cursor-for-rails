@@ -17,8 +17,7 @@ paths:
       summary: ユーザの登録
       tags:
         - user
-      security:
-        - BearerAuth: []
+      security: []
       requestBody:
         required: true
         content:
@@ -129,6 +128,7 @@ paths:
                 $ref: '#/components/schemas/MovieList'
   /movies/{id}:
     get:
+      operationId: GetMovieDetails
       summary: 指定した映画の詳細を取得
       tags:
         - movie
